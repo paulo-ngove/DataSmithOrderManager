@@ -1,0 +1,9 @@
+{
+  "name": "store-orders-manager",
+  "version": "1.0.0",
+  "description": "Static frontend for Store Orders API",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  }
+}
