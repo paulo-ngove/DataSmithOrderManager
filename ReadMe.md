@@ -1,5 +1,3 @@
-Based on the provided chat and code, here's a comprehensive README for your application:
-
 # Store Order Management System
 
 A full-stack application for managing store orders with a .NET Core backend and Vanilla JS frontend.
