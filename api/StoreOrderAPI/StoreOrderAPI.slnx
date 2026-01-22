@@ -1,3 +1,7 @@
 <Solution>
-  <Project Path="StoreOrderAPI/StoreOrderAPI.csproj" />
+  <Folder Name="/Solution Items/">
+    <File Path="tests-build-azure-pipeline.yml" />
+  </Folder>
+  <Project Path="../../../../../../../../Personal Files/Interware Digital Solutions/Projects/DataSmartOrderManager/api/StoreOrderAPI/StoreOrderAPI.Tests/StoreOrderAPI.Tests.csproj" />
+  <Project Path="../../../../../../../../Personal Files/Interware Digital Solutions/Projects/DataSmartOrderManager/api/StoreOrderAPI/StoreOrderAPI/StoreOrderAPI.csproj" />
 </Solution>

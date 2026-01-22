@@ -1,0 +1,32 @@
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  buildConfiguration: 'Release'
+
+steps:
+# Step 1: Restore NuGet packages
+- task: DotNetCoreCLI@2
+  displayName: 'Restore NuGet packages'
+  inputs:
+    command: 'restore'
+    projects: '**/*.csproj'
+
+# Step 2: Build the solution
+- task: DotNetCoreCLI@2
+  displayName: 'Build'
+  inputs:
+    command: 'build'
+    projects: '**/*.csproj'
+    arguments: '--configuration $(buildConfiguration) --no-restore'
+
+# Step 3: Run xUnit tests
+- task: DotNetCoreCLI@2
+  displayName: 'Run xUnit Tests'
+  inputs:
+    command: 'test'
+    projects: '**/StoreOrderAPI.Tests/*.csproj'
+    arguments: '--configuration $(buildConfiguration) --no-build --logger "trx;LogFileName=testresults.trx"'
