@@ -111,9 +111,7 @@ namespace StoreOrdersAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<OrderDto>> CreateOrder(CreateOrderDto createOrderDto)
         {
-            var orderNumber = string.IsNullOrEmpty(createOrderDto.OrderNumber)
-                ? $"PO-{DateTime.UtcNow:yyyyMMdd}-{Guid.NewGuid().ToString().Substring(0, 8).ToUpper()}"
-                : createOrderDto.OrderNumber;
+            var orderNumber = $"PO-{DateTime.UtcNow:yyyyMMdd}-{Guid.NewGuid().ToString().Substring(0, 8).ToUpper()}";
 
             if (await _context.Orders.AnyAsync(o => o.OrderNumber == orderNumber))
             {
@@ -127,7 +125,7 @@ namespace StoreOrdersAPI.Controllers
             foreach (var itemDto in createOrderDto.OrderLineItems)
             {
                 var lineItem = _mapper.Map<OrderLineItem>(itemDto);
-                lineItem.OrderId = order.Id; // Will be set after order is saved
+                lineItem.OrderId = order.Id;
                 order.OrderLineItems.Add(lineItem);
                 totalAmount += lineItem.LineTotal;
             }
@@ -138,7 +136,7 @@ namespace StoreOrdersAPI.Controllers
             await _context.SaveChangesAsync();
 
             var orderDto = _mapper.Map<OrderDto>(order);
-            return CreatedAtAction(nameof(GetOrder), new { id = order.Id }, orderDto);
+            return CreatedAtAction(nameof(CreateOrder), new { id = order.Id }, orderDto);
         }
 
         // PUT: api/orders/{id}
@@ -235,12 +233,6 @@ namespace StoreOrdersAPI.Controllers
 
             var oldStatus = order.Status;
             var newStatus = statusUpdateDto.Status;
-
-            // Validate status transition
-            if (!IsValidStatusTransition(oldStatus, newStatus))
-            {
-                return BadRequest($"Invalid status transition from {oldStatus} to {newStatus}");
-            }
 
             _mapper.Map(statusUpdateDto, order);
 
@@ -345,27 +337,6 @@ namespace StoreOrdersAPI.Controllers
         private bool OrderExists(int id)
         {
             return _context.Orders.Any(e => e.Id == id);
-        }
-
-        private bool IsValidStatusTransition(OrderStatus oldStatus, OrderStatus newStatus)
-        {
-            var validTransitions = new Dictionary<OrderStatus, List<OrderStatus>>
-            {
-                [OrderStatus.Draft] = new List<OrderStatus> { OrderStatus.Pending, OrderStatus.Cancelled },
-                [OrderStatus.Pending] = new List<OrderStatus> { OrderStatus.Approved, OrderStatus.OnHold, OrderStatus.Cancelled },
-                [OrderStatus.Approved] = new List<OrderStatus> { OrderStatus.Ordered, OrderStatus.Cancelled },
-                [OrderStatus.Ordered] = new List<OrderStatus> { OrderStatus.Received, OrderStatus.PartiallyReceived, OrderStatus.Cancelled },
-                [OrderStatus.OnHold] = new List<OrderStatus> { OrderStatus.Pending, OrderStatus.Cancelled },
-                [OrderStatus.PartiallyReceived] = new List<OrderStatus> { OrderStatus.Received }
-            };
-
-            if (!validTransitions.ContainsKey(oldStatus))
-                return false;
-
-            if (oldStatus == OrderStatus.Received || oldStatus == OrderStatus.Cancelled)
-                return false;
-
-            return validTransitions[oldStatus].Contains(newStatus);
         }
 
         private string GetStatusDisplayName(OrderStatus status)

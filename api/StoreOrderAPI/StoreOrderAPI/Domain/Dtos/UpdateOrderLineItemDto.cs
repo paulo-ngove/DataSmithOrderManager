@@ -18,7 +18,7 @@ namespace StoreOrderAPI.Domain.Dtos
         public decimal? Quantity { get; set; }
 
         [StringLength(20)]
-        public UnitType? Unit { get; set; }
+        public string? Unit { get; set; }
 
         [Range(0, double.MaxValue)]
         public decimal? UnitPrice { get; set; }

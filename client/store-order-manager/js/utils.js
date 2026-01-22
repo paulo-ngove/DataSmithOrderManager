@@ -2,7 +2,7 @@ const utils = {
     formatDate: (dateString) => {
         if (!dateString) return '';
         const date = new Date(dateString);
-        return date.toLocaleDateString('en-US', {
+        return date.toLocaleDateString('en-ZA', {
             year: 'numeric',
             month: 'short',
             day: 'numeric',
@@ -10,9 +10,9 @@ const utils = {
     },
 
     formatCurrency: (amount) => {
-        return new Intl.NumberFormat('en-US', {
+        return new Intl.NumberFormat('en-ZA', {
             style: 'currency',
-            currency: 'USD',
+            currency: 'ZAR',
         }).format(amount);
     },
 
@@ -27,49 +27,96 @@ const utils = {
 
     showError: (element, message) => {
         element.innerHTML = `
-            <div class="alert alert-error">
-                <div class="flex items-center">
-                    <i class="fas fa-exclamation-circle mr-2"></i>
-                    <p>${message}</p>
-                </div>
-                <button onclick="location.reload()" class="mt-3 text-red-700 hover:text-red-800 font-medium text-sm">
-                    Try again
-                </button>
+        <div class="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+            <div class="flex items-center">
+                <i class="fas fa-exclamation-circle text-red-600 mr-2"></i>
+                <p class="text-sm text-red-700">
+                    ${message}
+                </p>
             </div>
+            <button onclick="location.reload()" class="mt-3 text-red-700 hover:text-red-800 font-medium text-sm">
+                Try again
+            </button>
+        </div>
         `;
     },
 
     showErrorAlert: (message) => {
         const alert = document.createElement('div');
-        alert.className = 'alert alert-danger mb-4';
         alert.innerHTML = `
-            <div class="alert alert-danger mb-4 flex items-center">
-                <i class="fas fa-exclamation-circle mr-2"></i>
-                <p>${message}</p>
+             <div class="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                <div class="flex items-center">
+                    <i class="fas fa-exclamation-circle text-red-600 mr-2"></i>
+                    <p class="text-sm text-red-700">
+                        ${message}
+                    </p>
+                </div>
             </div>
         `;
-        
+  
         const content = document.getElementById('content');
         if (content) {
             content.insertBefore(alert, content.firstChild);
-            setTimeout(() => alert.remove(), 4000);
+            setTimeout(() => alert.remove(), 6000);
         }
     },
 
     showSuccess: (message) => {
         const alert = document.createElement('div');
-        alert.className = 'alert alert-success mb-4';
         alert.innerHTML = `
-            <div class="flex items-center">
-                <i class="fas fa-check-circle mr-2"></i>
-                <p>${message}</p>
-            </div>
+             <div class="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+                <div class="flex items-center">
+                    <i class="fas fa-check-circle text-green-600 mr-2"></i>
+                    <p class="text-sm text-green-700">
+                        ${message}
+                    </p>
+                </div>
+              </div>
         `;
         
         const content = document.getElementById('content');
         content.insertBefore(alert, content.firstChild);
         
-        setTimeout(() => alert.remove(), 4000);
+        setTimeout(() => alert.remove(), 6000);
+    },
+
+    getUnitDisplayName(unitValue) {
+        switch (unitValue) {
+        case 0: return "Piece";
+        case 1: return "Kilogram";
+        case 2: return "Gram";
+        case 3: return "Liter";
+        case 4: return "Milliliter";
+        case 5: return "Meter";
+        case 6: return "Centimeter";
+        case 7: return "Box";
+        case 8: return "Pack";
+        case 9: return "Pair";
+        case 10: return "Dozen";
+        case 11: return "Roll";
+        case 12: return "Bottle";
+        case 13: return "Can";
+        case 14: return "Bag";
+        case 15: return "Case";
+        default: return `Unknown (${unitValue})`;
+        }
+    },
+
+    getOrderStatusName(statusValue) {
+        const statusNames = [
+            "Draft",
+            "Pending",
+            "Approved",
+            "Ordered",
+            "Received",
+            "PartiallyReceived",
+            "Cancelled",
+            "OnHold"
+        ];
+        
+        return statusNames[statusValue] !== undefined 
+            ? statusNames[statusValue] 
+            : `Unknown (${statusValue})`;
     },
 
     getStatusBadge: (status) => {

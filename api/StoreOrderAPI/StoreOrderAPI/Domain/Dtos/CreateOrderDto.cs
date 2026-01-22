@@ -5,8 +5,6 @@ namespace StoreOrderAPI.Domain.Dtos
 
     public class CreateOrderDto
     {
-        [Required]
-        [StringLength(50)]
         public string OrderNumber { get; set; } = string.Empty;
 
         [Required]

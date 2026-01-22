@@ -530,7 +530,7 @@ async function handleCreateOrder(e) {
     try {
         const formData = new FormData(form);
         const data = {
-            orderNumber: formData.get('orderNumber') || undefined,
+            orderNumber: formData.get('orderNumber') || 'temp-order-number',
             orderDate: formData.get('orderDate'),
             supplierName: formData.get('supplierName'),
             supplierContact: formData.get('supplierContact') || undefined,
@@ -547,7 +547,7 @@ async function handleCreateOrder(e) {
                 productName: formData.get(`lineItems[${i}].productName`),
                 productCode: formData.get(`lineItems[${i}].productCode`) || undefined,
                 quantity: parseFloat(formData.get(`lineItems[${i}].quantity`)),
-                unit: parseInt(formData.get(`lineItems[${i}].unit`)),
+                unit: utils.getUnitDisplayName(parseInt(formData.get(`lineItems[${i}].unit`))),
                 unitPrice: parseFloat(formData.get(`lineItems[${i}].unitPrice`))
             };
             data.orderLineItems.push(item);
@@ -1010,7 +1010,7 @@ async function handleEditOrder(e) {
             supplierContact: formData.get('supplierContact') || undefined,
             supplierEmail: formData.get('supplierEmail') || undefined,
             supplierPhone: formData.get('supplierPhone') || undefined,
-            status: parseInt(formData.get('status')),
+            status: utils.getOrderStatusName(parseInt(formData.get('status'))),
             expectedDeliveryDate: formData.get('expectedDeliveryDate') || undefined,
             notes: formData.get('notes') || undefined
         };
@@ -1024,7 +1024,7 @@ async function handleEditOrder(e) {
                 productName: formData.get(`lineItems[${i}].productName`),
                 productCode: formData.get(`lineItems[${i}].productCode`) || undefined,
                 quantity: parseFloat(formData.get(`lineItems[${i}].quantity`)),
-                unit: parseInt(formData.get(`lineItems[${i}].unit`)),
+                unit: utils.getUnitDisplayName(parseInt(formData.get(`lineItems[${i}].unit`))),               
                 unitPrice: parseFloat(formData.get(`lineItems[${i}].unitPrice`))
             };
             

@@ -23,7 +23,7 @@ namespace StoreOrderAPI.Domain.Dtos
 
         [Required]
         [StringLength(20)]
-        public UnitType Unit { get; set; } = UnitType.Piece;
+        public string Unit { get; set; } = UnitType.Piece.ToString();
 
         [Required]
         [Range(0, double.MaxValue)]

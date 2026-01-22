@@ -114,7 +114,7 @@ namespace StoreOrdersAPI.Controllers
             await _context.SaveChangesAsync();
 
             var itemDto = _mapper.Map<OrderLineItemDto>(item);
-            return CreatedAtAction(nameof(GetOrderLineItem), new { id = item.Id }, itemDto);
+            return CreatedAtAction(nameof(CreateOrderLineItem), new { id = item.Id }, itemDto);
         }
 
         // PUT: api/orderlineitems/{id}

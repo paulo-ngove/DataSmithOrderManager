@@ -11,10 +11,14 @@ const api = {
 
         const response = await fetch(url, { ...defaultOptions, ...options });
         
-        if (!response.ok) {
-            const error = await response.json();
-            throw new Error(error.message || 'Something went wrong');
+        const isSuccess = response.status >= 200 && response.status <= 209;
+        
+        if (!isSuccess) {
+            const error = await response.json().catch(() => ({ message: `HTTP ${response.status}: Something went wrong` }));
+            throw new Error(error.message || `HTTP ${response.status}: Something went wrong`);
         }
+        
+        if (response.status === 204) return null;
         
         return response.json();
     },
